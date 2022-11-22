@@ -90,6 +90,8 @@ body
   z-index: 1
 
 .drawer 
+  display: flex
+  flex-direction: column
   position: absolute
   width: 420px
   height: 100%
@@ -99,6 +101,7 @@ body
   padding: 30px 
 
 .items 
+  float: 1
   overflow: auto
   margin-bottom: 40px
 
@@ -148,7 +151,7 @@ body
     font-weight: 500
     cursor: pointer
     transform: background 0.2s ease-in-out
-    
+
     &:hover
       background: lighten(#9dd558, 7%)
 
