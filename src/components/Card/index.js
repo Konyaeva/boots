@@ -1,10 +1,12 @@
+import styles from './Card.module.sass';
+
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
 //props передают в объект данные страницы
 function Card(props) {
     return (
-        <div className="card">
-        <div className="favorite">
+        <div className={styles.card}>
+        <div className={styles.favorite}>
         <img src="img/heart.svg" alt="unliked"/>
         </div>
         <img width={133} height={112} src={props.imageUrl} alt="sneakers" />
