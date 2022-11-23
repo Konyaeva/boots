@@ -1,5 +1,6 @@
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
+//props передают в объект данные страницы
 function Card(props) {
     return (
         <div className="card">
@@ -13,7 +14,7 @@ function Card(props) {
           <span>Цена: </span>
           <b>{props.price} руб. </b>
           </div>
-          <button className="button">
+          <button className="button" onClick={props.onClickButton}>
             <img width={11} height={11} src="/img/plus.svg" alt="plus" />
           </button>
         </div>

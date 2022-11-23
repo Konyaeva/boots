@@ -56,6 +56,7 @@ function App() {
             title= {obj.title}
             price= {obj.price} 
             imageUrl = {obj.imageUrl}
+            onClicl={() => console.log(obj) }
           /> 
         ))}
        
@@ -66,3 +67,4 @@ function App() {
 }
 
 export default App;
+
