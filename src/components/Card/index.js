@@ -1,12 +1,19 @@
+import React from 'react';
 import styles from './Card.module.sass';
 
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
 //props передают в объект данные страницы
 function Card(props) {
+  const [isAdded, setIsAdded ] = React.useState(false);
+
+  const onClickPlus = () => {
+    setIsAdded(!isAdded);  //Добавить в корзину и убрать с корзины
+  };
+
     return (
         <div className={styles.card}>
-        <div className={styles.favorite}>
+        <div className={styles.favorite} onClick={props.onFavorute}>
         <img src="img/heart.svg" alt="unliked"/>
         </div>
         <img width={133} height={112} src={props.imageUrl} alt="sneakers" />
@@ -16,9 +23,11 @@ function Card(props) {
           <span>Цена: </span>
           <b>{props.price} руб. </b>
           </div>
-          <button className="button" onClick={props.onClickButton}>
-            <img width={11} height={11} src="/img/plus.svg" alt="plus" />
-          </button>
+            <img className={styles.plus}
+            // выделяем товар для корзины
+            onClick={onClickPlus} 
+            src={isAdded ? '/img/btn-checked.svg' : '/img/btn-plus.svg'} 
+            alt="plus" />
         </div>
       </div>
     );
