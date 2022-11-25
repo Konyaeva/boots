@@ -8,8 +8,9 @@ import Drawer from './components/Drawer';
 //функциия открытие корзины
 function App() {
   const [items, setItems] = React.useState([])
-  const [cartItems, setCartItems] = React.useState([])
-  const [cartOpened, setCartOpened] = React.useState(false);
+  const [cartItems, setCartItems] = React.useState([]) //Отображения каталога
+  const [searchValue, setSearchValue] = React.useState('') //Поиск
+  const [cartOpened, setCartOpened] = React.useState(false); //Открытие корзины и закрытие 
 
   //бэкенд карточки товара залит сюда https://mockapi.io/projects/637f70212f8f56e28e8c10fc 
 
@@ -29,6 +30,10 @@ const onAddToCart = (obj) => {
 };
 
 
+const onChangeSearchInput = (event) => {
+  setSearchValue(event.target.value);
+}
+
   return (
   <div className="wrapper clear">
     {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false) } /> } 
@@ -36,10 +41,12 @@ const onAddToCart = (obj) => {
     {/* Поиск */}
     <div className="content p-40">
      <div className="d-flex align-center justify-between mb-40">
-     <h1>Все кроссовки</h1>
+     <h1>{searchValue ? `Поиск по запросу: ${searchValue}` : 'Все кроссовки'}</h1>
      <div className="search-block d-flex">
       <img src ='/img/search.svg' alt = 'search'/>
-      <input placeholder="Поиск ..." />
+      {searchValue && <img onClick ={() => setSearchValue('')} 
+      className="clear cu-p" src="/img/btn-remove.svg" alt="Clear" />}
+      <input onChange = {onChangeSearchInput} value={searchValue} placeholder="Поиск ..." />
      </div>
      </div>
 
@@ -48,8 +55,10 @@ const onAddToCart = (obj) => {
         {/* 2 шаг указываем, где этот файл должен находится  */}
         {/* Делаем объект, чтобы передавать информацию, не дублируя ее */}
      
-        {items.map((item) => (
+        {items.filter(item => item.title.includes(searchValue)).map((item, index) => ( //Функция поиск товара
           <Card
+          //Key нужно для уникального значения 
+          key={index}
             title= {item.title}
             price= {item.price} 
             imageUrl = {item.imageUrl}
