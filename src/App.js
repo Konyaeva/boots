@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'; //сохраняет товар в бэк корзина
 import Card from './components/Card'; //1 шаг Берем нужны нам файл 
 import Header from './components/Header';
 import Drawer from './components/Drawer';
@@ -15,20 +16,27 @@ function App() {
   //бэкенд карточки товара залит сюда https://mockapi.io/projects/637f70212f8f56e28e8c10fc 
 
 React.useEffect(() => {
-  fetch('https://637f70212f8f56e28e8c10fb.mockapi.io/items')
+  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items')//каталог корзины весит в бэк 
   .then((res) => {
-    return res.json();
-  })
-  .then((json) => {
-    setItems(json);
+    setItems(res.data);
+  });
+  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items')//каталог корзины весит в бэк, то что будет в корзине сохранить
+  .then((res) => {
+    setCartItems(res.data);
   });
 }, []);
 
 //добавление товара в корзину 
 const onAddToCart = (obj) => {
-  setCartItems(prev => [...prev, obj]);
+  axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/cart', obj);//каталог корзины весит в бэк 
+  setCartItems((prev) => [...prev, obj]);
 };
 
+// Удалние из корзины 
+const onRemoveItem = (id) => {
+  // axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/cart ${id}`);//каталог корзины весит в бэк 
+  setCartItems((prev) => prev.filter(item => item.id !== id));
+};
 
 const onChangeSearchInput = (event) => {
   setSearchValue(event.target.value);
@@ -36,7 +44,7 @@ const onChangeSearchInput = (event) => {
 
   return (
   <div className="wrapper clear">
-    {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false) } /> } 
+    {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove = {onRemoveItem} /> } 
     <Header onClickCart={() => setCartOpened(true)}/>  {/* Шапка сайта */}
     {/* Поиск */}
     <div className="content p-40">
