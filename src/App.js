@@ -3,7 +3,7 @@ import {Router} from 'react-router-dom';
 import axios from 'axios'; //сохраняет товар в бэк корзина
 import Header from './components/Header';
 import Drawer from './components/Drawer';
-import Home from './components/pages/Home';
+import Home from './pages/Home';
 
 
 
