@@ -4,18 +4,24 @@ import styles from './Card.module.sass';
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
 //props передают в объект данные страницы
-function Card({onFavorute, onPlus, title, imageUrl, price}) {
+function Card({onFavorite, onPlus, title, imageUrl, price}) {
   const [isAdded, setIsAdded ] = React.useState(false);
+  const [isFavorite, setIsFavorite] = React.useState(false);
 
   const onClickPlus = () => {
-    onPlus( title, imageUrl, price);
+    onPlus({title, imageUrl, price});
     setIsAdded(!isAdded);  //Добавить в корзину и убрать с корзины
   };
 
+  //функция кнопки favorite
+  const onClickFavorite = () => {
+    onFavorite({title, imageUrl, price});
+    setIsFavorite(!isFavorite);
+  }
     return (
         <div className={styles.card}>
-        <div className={styles.favorite} onClick={onFavorute}>
-        <img src="img/heart.svg" alt="unliked"/>
+        <div className={styles.favorite} onClick={onClickFavorite}>
+        <img src={isFavorite ? 'img/liked.svg' : '/img/unliked.svg'} alt="unliked"/>
         </div>
         <img width={133} height={112} src={imageUrl} alt="sneakers" />
         <h5>{title}</h5>
