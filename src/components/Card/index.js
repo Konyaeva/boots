@@ -4,9 +4,9 @@ import styles from './Card.module.sass';
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
 //props передают в объект данные страницы
-function Card({onFavorite, onPlus, title, imageUrl, price}) {
+function Card({id, onFavorite, onPlus, title, imageUrl, price, favorited = false}) {
   const [isAdded, setIsAdded ] = React.useState(false);
-  const [isFavorite, setIsFavorite] = React.useState(false);
+  const [isFavorite, setIsFavorite] = React.useState(favorited);
 
   const onClickPlus = () => {
     onPlus({title, imageUrl, price});
@@ -15,7 +15,7 @@ function Card({onFavorite, onPlus, title, imageUrl, price}) {
 
   //функция кнопки favorite
   const onClickFavorite = () => {
-    onFavorite({title, imageUrl, price});
+    onFavorite({id, title, imageUrl, price});
     setIsFavorite(!isFavorite);
   }
     return (

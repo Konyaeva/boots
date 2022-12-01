@@ -29,11 +29,9 @@ function Home({
           <Card
           //Key нужно для уникального значения 
           key={index}
-            title= {item.title}
-            price= {item.price} 
-            imageUrl = {item.imageUrl}
             onFavorite = {(obj) => onAddToFavorite(obj)}
             onPlus={(obj) => onAddToCart(obj)}
+            {...item}
           /> 
           ))}
       </div>

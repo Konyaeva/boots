@@ -27,6 +27,10 @@ React.useEffect(() => {
   .then((res) => {
     setCartItems(res.data);
   });
+  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites')//каталог корзины весит в бэк, то что будет в корзине сохранить
+  .then((res) => {
+    setFavorites(res.data);
+  });
 }, []);
 
 //добавление товара в корзину 
@@ -42,10 +46,20 @@ axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/cart/${id}`);//кат�
 };
 
 //Добавление товара в избранное
-const onAddToFavorite = (obj) => {
-  axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites', obj);//каталог корзины весит в бэк 
-  setFavorites((prev) => [...prev, obj]);
-};
+const onAddToFavorite = async (obj) => {
+  try {
+    if(favorites.find((favObj) => favObj.id == obj.id)) {
+      axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/favorites/${obj.id}`);//запрос на удаление похоже id
+      // setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+    } else {
+      const { data } = await axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites', obj);//каталог корзины весит в бэк 
+      setFavorites((prev) => [...prev, data]);
+  }
+  } catch (error) {
+    alert('Не удалось добавить в закладки')
+  }
+  };
+
 
 const onChangeSearchInput = (event) => {
   setSearchValue(event.target.value);
