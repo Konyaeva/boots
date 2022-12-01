@@ -1,9 +1,10 @@
 import React from 'react';
-import {Router} from 'react-router-dom';
+import { Route, Router, Routes } from 'react-router-dom';
 import axios from 'axios'; //сохраняет товар в бэк корзина
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Home from './pages/Home';
+import Favorites from './pages/Favorites';
 
 
 
@@ -52,19 +53,28 @@ const onChangeSearchInput = (event) => {
 
   return (
   <div className="wrapper clear">
-    {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove = {onRemoveItem} /> } 
-    <Header onClickCart={() => setCartOpened(true)}/>  {/* Шапка сайта */}
-
-    <Router path="/" exact>
-    <Home 
-    itmes={items} 
-    searchValue={searchValue} 
-    setSearchValue={setSearchValue}
-    onChangeSearchInput={onChangeSearchInput}
-    onAddToCart={onAddToCart}
-    onAddToFavorite={onAddToFavorite}
-    />
-    </Router>
+    {cartOpened && <Drawer 
+    items={cartItems} 
+    onClose={() => setCartOpened(false)} 
+    onRemove = {onRemoveItem} 
+    /> } 
+    <Header onClickCart={() => setCartOpened(true)}/> 
+<Routes>
+        <Route path="/" element={<Home
+          items={items} 
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          onChangeSearchInput={onChangeSearchInput}
+          onAddToFavorite={onAddToFavorite}
+          onAddToCart={onAddToCart} />}
+        />
+        <Route path="/favorites" element={
+          <Favorites
+            items={favorites}
+            onAddToFavorite={onAddToFavorite}
+          />}
+        />
+      </Routes>
   </div>
   );
 }

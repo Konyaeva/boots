@@ -1,4 +1,4 @@
-import Card from '../components/Card'; 
+import Card from '../components/Card';
 
 function Home({
     items,
@@ -6,7 +6,7 @@ function Home({
     setSearchValue,
     onChangeSearchInput,
     onAddToCart,
-    onAddToFavorite
+    onAddToFavorite,
 }) {
     return (  
     <div className="content p-40">
