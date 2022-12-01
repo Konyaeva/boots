@@ -1,65 +1,94 @@
 import React from 'react';
-import Card from './components/Card'; //1 шаг Берем нужны нам файл 
+import { Route, Router, Routes } from 'react-router-dom';
+import axios from 'axios'; //сохраняет товар в бэк корзина
 import Header from './components/Header';
 import Drawer from './components/Drawer';
+import Home from './pages/Home';
+import Favorites from './pages/Favorites';
 
 
 
 //функциия открытие корзины
 function App() {
-  const [items, setItems] = React.useState([])
-  const [cartItems, setCartItems] = React.useState([])
-  const [cartOpened, setCartOpened] = React.useState(false);
+  const [items, setItems] = React.useState([]);
+  const [favorites, setFavorites] = React.useState([]); //каталог избранного
+  const [cartItems, setCartItems] = React.useState([]); //Отображения каталога
+  const [searchValue, setSearchValue] = React.useState(''); //Поиск
+  const [cartOpened, setCartOpened] = React.useState(false); //Открытие корзины и закрытие 
 
   //бэкенд карточки товара залит сюда https://mockapi.io/projects/637f70212f8f56e28e8c10fc 
 
 React.useEffect(() => {
-  fetch('https://637f70212f8f56e28e8c10fb.mockapi.io/items')
+  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items')//каталог корзины весит в бэк 
   .then((res) => {
-    return res.json();
-  })
-  .then((json) => {
-    setItems(json);
+    setItems(res.data);
+  });
+  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/cart')//каталог корзины весит в бэк, то что будет в корзине сохранить
+  .then((res) => {
+    setCartItems(res.data);
+  });
+  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites')//каталог корзины весит в бэк, то что будет в корзине сохранить
+  .then((res) => {
+    setFavorites(res.data);
   });
 }, []);
 
 //добавление товара в корзину 
 const onAddToCart = (obj) => {
-  setCartItems(prev => [...prev, obj]);
+  axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/cart', obj);//каталог корзины весит в бэк 
+  setCartItems((prev) => [...prev, obj]);
 };
 
+// Удалние из корзины 
+const onRemoveItem = (id) => {
+axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/cart/${id}`);//каталог корзины весит в бэк 
+  setCartItems((prev) => prev.filter((item) => item.id !== id));
+};
+
+//Добавление товара в избранное
+const onAddToFavorite = async (obj) => {
+  try {
+    if(favorites.find((favObj) => favObj.id == obj.id)) {
+      axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/favorites/${obj.id}`);//запрос на удаление похоже id
+      // setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+    } else {
+      const { data } = await axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites', obj);//каталог корзины весит в бэк 
+      setFavorites((prev) => [...prev, data]);
+  }
+  } catch (error) {
+    alert('Не удалось добавить в закладки')
+  }
+  };
+
+
+const onChangeSearchInput = (event) => {
+  setSearchValue(event.target.value);
+};
 
   return (
   <div className="wrapper clear">
-    {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false) } /> } 
-    <Header onClickCart={() => setCartOpened(true)}/>  {/* Шапка сайта */}
-    {/* Поиск */}
-    <div className="content p-40">
-     <div className="d-flex align-center justify-between mb-40">
-     <h1>Все кроссовки</h1>
-     <div className="search-block d-flex">
-      <img src ='/img/search.svg' alt = 'search'/>
-      <input placeholder="Поиск ..." />
-     </div>
-     </div>
-
-      <div className="d-flex flex-wrap">
-
-        {/* 2 шаг указываем, где этот файл должен находится  */}
-        {/* Делаем объект, чтобы передавать информацию, не дублируя ее */}
-     
-        {items.map((item) => (
-          <Card
-            title= {item.title}
-            price= {item.price} 
-            imageUrl = {item.imageUrl}
-            onFavorute = {() => console.log('Добавили в закладки')}
-            onPlus={(obj) => onAddToCart(item)}
-          /> 
-        ))}
-       
-      </div>
-    </div>
+    {cartOpened && <Drawer 
+    items={cartItems} 
+    onClose={() => setCartOpened(false)} 
+    onRemove = {onRemoveItem} 
+    /> } 
+    <Header onClickCart={() => setCartOpened(true)}/> 
+<Routes>
+        <Route path="/" element={<Home
+          items={items} 
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          onChangeSearchInput={onChangeSearchInput}
+          onAddToFavorite={onAddToFavorite}
+          onAddToCart={onAddToCart} />}
+        />
+        <Route path="/favorites" element={
+          <Favorites
+            items={favorites}
+            onAddToFavorite={onAddToFavorite}
+          />}
+        />
+      </Routes>
   </div>
   );
 }
