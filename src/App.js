@@ -18,64 +18,68 @@ function App() {
 
   //бэкенд карточки товара залит сюда https://mockapi.io/projects/637f70212f8f56e28e8c10fc 
 
-React.useEffect(() => {
-  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items')//каталог корзины весит в бэк 
-  .then((res) => {
-    setItems(res.data);
-  });
-  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/cart')//каталог корзины весит в бэк, то что будет в корзине сохранить
-  .then((res) => {
-    setCartItems(res.data);
-  });
-  axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites')//каталог корзины весит в бэк, то что будет в корзине сохранить
-  .then((res) => {
-    setFavorites(res.data);
-  });
-}, []);
+  React.useEffect(() => {
+    axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items')//каталог корзины весит в бэк 
+      .then((res) => {
+        setItems(res.data);
+      });
+    axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/cart')//каталог корзины весит в бэк, то что будет в корзине сохранить
+      .then((res) => {
+        setCartItems(res.data);
+      });
+    axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites')//каталог корзины весит в бэк, то что будет в корзине сохранить
+      .then((res) => {
+        setFavorites(res.data);
+      });
+  }, []);
 
-//добавление товара в корзину 
-const onAddToCart = (obj) => {
-  axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/cart', obj);//каталог корзины весит в бэк 
-  setCartItems((prev) => [...prev, obj]);
-};
-
-// Удалние из корзины 
-const onRemoveItem = (id) => {
-axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/cart/${id}`);//каталог корзины весит в бэк 
-  setCartItems((prev) => prev.filter((item) => item.id !== id));
-};
-
-//Добавление товара в избранное
-const onAddToFavorite = async (obj) => {
-  try {
-    if(favorites.find((favObj) => favObj.id == obj.id)) {
-      axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/favorites/${obj.id}`);//запрос на удаление похоже id
-      // setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+  //добавление товара в корзину 
+  const onAddToCart = (obj) => {
+    if (cartItems.find((item) => item.id == obj.id)) {
+      setCartItems(prev => prev.filter(item => item.id !== obj.id));
     } else {
-      const { data } = await axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites', obj);//каталог корзины весит в бэк 
-      setFavorites((prev) => [...prev, data]);
-  }
-  } catch (error) {
-    alert('Не удалось добавить в закладки')
-  }
+      axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/cart', obj);//каталог корзины весит в бэк 
+      setCartItems((prev) => [...prev, obj]);
+    }
+  };
+
+  // Удалние из корзины 
+  const onRemoveItem = (id) => {
+    axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/cart/${id}`);//каталог корзины весит в бэк 
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  //Добавление товара в избранное
+  const onAddToFavorite = async (obj) => {
+    try {
+      if (favorites.find((favObj) => favObj.id == obj.id)) {
+        axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/favorites/${obj.id}`);//запрос на удаление похоже id
+        // setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+      } else {
+        const { data } = await axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites', obj);//каталог корзины весит в бэк 
+        setFavorites((prev) => [...prev, data]);
+      }
+    } catch (error) {
+      alert('Не удалось добавить в закладки')
+    }
   };
 
 
-const onChangeSearchInput = (event) => {
-  setSearchValue(event.target.value);
-};
+  const onChangeSearchInput = (event) => {
+    setSearchValue(event.target.value);
+  };
 
   return (
-  <div className="wrapper clear">
-    {cartOpened && <Drawer 
-    items={cartItems} 
-    onClose={() => setCartOpened(false)} 
-    onRemove = {onRemoveItem} 
-    /> } 
-    <Header onClickCart={() => setCartOpened(true)}/> 
-<Routes>
+    <div className="wrapper clear">
+      {cartOpened && <Drawer
+        items={cartItems}
+        onClose={() => setCartOpened(false)}
+        onRemove={onRemoveItem}
+      />}
+      <Header onClickCart={() => setCartOpened(true)} />
+      <Routes>
         <Route path="/" element={<Home
-          items={items} 
+          items={items}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
           onChangeSearchInput={onChangeSearchInput}
@@ -89,7 +93,7 @@ const onChangeSearchInput = (event) => {
           />}
         />
       </Routes>
-  </div>
+    </div>
   );
 }
 
