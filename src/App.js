@@ -15,28 +15,37 @@ function App() {
   const [cartItems, setCartItems] = React.useState([]); //Отображения каталога
   const [searchValue, setSearchValue] = React.useState(''); //Поиск
   const [cartOpened, setCartOpened] = React.useState(false); //Открытие корзины и закрытие 
+  const [isLoading, setIsLoading] = React.useState(true); //при загрузки страницы фейк карты
 
   //бэкенд карточки товара залит сюда https://mockapi.io/projects/637f70212f8f56e28e8c10fc 
 
   React.useEffect(() => {
-    axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items')//каталог корзины весит в бэк 
-      .then((res) => {
-        setItems(res.data);
-      });
-    axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/cart')//каталог корзины весит в бэк, то что будет в корзине сохранить
-      .then((res) => {
-        setCartItems(res.data);
-      });
-    axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites')//каталог корзины весит в бэк, то что будет в корзине сохранить
-      .then((res) => {
-        setFavorites(res.data);
-      });
+  async function fetchData() {
+    try {
+      const [cartResponse, favoritesResponse, itemsResponse] = await Promise.all([
+   await axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/cart'),//каталог корзины весит в бэк, то что будет в корзине сохранить
+   await axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites'),//каталог корзины весит в бэк, то что будет в корзине сохранить
+   await axios.get('https://637f70212f8f56e28e8c10fb.mockapi.io/items'),//каталог корзины весит в бэк 
+    ]);
+
+  setIsLoading(false); //заканчивает загрузку фейк карточек
+  setCartItems(cartResponse.data);
+  setFavorites(favoritesResponse.data);
+  setItems(itemsResponse.data);
+} catch (error) {
+  alert('Ошибка при запросе данных ;(');
+  console.error(error);
+}
+  }
+
+fetchData(); 
   }, []);
 
   //добавление товара в корзину 
   const onAddToCart = (obj) => {
-    if (cartItems.find((item) => item.id == obj.id)) {
-      setCartItems(prev => prev.filter(item => item.id !== obj.id));
+    if (cartItems.find((item) => Number(item.id) == Number(obj.id))) {
+      axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/cart/${obj.id}`);
+      setCartItems(prev => prev.filter(item => Number(item.id) !== Number(item.id)));
     } else {
       axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/cart', obj);//каталог корзины весит в бэк 
       setCartItems((prev) => [...prev, obj]);
@@ -80,11 +89,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home
           items={items}
+          cartItems={cartItems}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
           onChangeSearchInput={onChangeSearchInput}
           onAddToFavorite={onAddToFavorite}
           onAddToCart={onAddToCart} />}
+          isLoading={isLoading}
         />
         <Route path="/favorites" element={
           <Favorites

@@ -48,8 +48,8 @@ function Drawer({ onClose, onRemove, items = [] }) {
         ) : (
           <div className="cartEmpty d-flex align-center justify-center flex-column flex">
             <img className="mb-20" width="120px" height="120px" src="/img/empty-cart.jpg" alt="#" />
-            <p class="opacity-6">Корзина пуста</p>
-            <button onClick={onClose} class="greenButton">
+            <p className="opacity-6">Корзина пуста</p>
+            <button onClick={onClose} className="greenButton">
               <img src="/img/arrow.svg" alt="Arrow" />
               Вернуться назад
             </button>
