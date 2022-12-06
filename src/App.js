@@ -3,9 +3,11 @@ import { Route, Router, Routes } from 'react-router-dom';
 import axios from 'axios'; //сохраняет товар в бэк корзина
 import Header from './components/Header';
 import Drawer from './components/Drawer';
+
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
 
+export const AppContext = React.createContext({});
 
 
 //функциия открытие корзины
@@ -79,7 +81,9 @@ fetchData();
   };
 
   return (
-    <div className="wrapper clear">
+    //Все мое приложение должен знать AppContex
+    <AppContext.Provider value={{items, cartItems, favorites}}>
+      <div className="wrapper clear">
       {cartOpened && <Drawer
         items={cartItems}
         onClose={() => setCartOpened(false)}
@@ -98,13 +102,11 @@ fetchData();
           isLoading={isLoading}
         />
         <Route path="/favorites" element={
-          <Favorites
-            items={favorites}
-            onAddToFavorite={onAddToFavorite}
-          />}
+          <Favorites onAddToFavorite={onAddToFavorite} />}
         />
       </Routes>
     </div>
+    </AppContext.Provider>
   );
 }
 
