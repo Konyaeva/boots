@@ -1,10 +1,11 @@
 import React from 'react';
-import ContentLoader from "react-content-loader";
+import ContentLoader from 'react-content-loader';
 import styles from './Card.module.sass';
 
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
 //props передают в объект данные страницы
+
 function Card({ id, onFavorite, onPlus, title, imageUrl,
   price, favorited = false, added = false, loading = false }) {
   const [isAdded, setIsAdded] = React.useState(added);
@@ -22,6 +23,7 @@ function Card({ id, onFavorite, onPlus, title, imageUrl,
   }
   return (
 
+    
     <div className={styles.card}>
       {
         loading ? <ContentLoader
@@ -39,7 +41,7 @@ function Card({ id, onFavorite, onPlus, title, imageUrl,
           <rect x="494" y="206" rx="10" ry="10" width="100" height="15" />
           <rect x="514" y="234" rx="5" ry="5" width="80" height="27" />
           <rect x="447" y="227" rx="10" ry="10" width="40" height="35" />
-        </ContentLoader> :
+        </ContentLoader>  : 
 
           //фрагмент  
           <>
@@ -57,7 +59,9 @@ function Card({ id, onFavorite, onPlus, title, imageUrl,
                 // выделяем товар для корзины
                 onClick={onClickPlus}
                 src={isAdded ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
-                alt="plus" />
+                alt="plus" 
+                />
+                
             </div>
           </>
       }

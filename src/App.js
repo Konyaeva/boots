@@ -98,8 +98,9 @@ fetchData();
           setSearchValue={setSearchValue}
           onChangeSearchInput={onChangeSearchInput}
           onAddToFavorite={onAddToFavorite}
-          onAddToCart={onAddToCart} />}
+          onAddToCart={onAddToCart} 
           isLoading={isLoading}
+          />}
         />
         <Route path="/favorites" element={
           <Favorites onAddToFavorite={onAddToFavorite} />}
