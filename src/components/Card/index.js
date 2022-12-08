@@ -1,19 +1,32 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
+
+import AppContext from '../../context';
+
 import styles from './Card.module.sass';
 
 //3 шаг Создаем функцию, которая показывает часть кода
 // Карточка товара
 //props передают в объект данные страницы
 
-function Card({ id, onFavorite, onPlus, title, imageUrl,
-  price, favorited = false, added = false, loading = false }) {
-  const [isAdded, setIsAdded] = React.useState(added);
+function Card({ 
+  id, 
+  onFavorite, 
+  onPlus, 
+  title, 
+  imageUrl,
+  price, 
+  favorited = false, 
+  loading = false 
+}) {
+
+  const { isItemAdded } = React.useContext(AppContext);  
   const [isFavorite, setIsFavorite] = React.useState(favorited);
 
+ //Добавить в корзину и убрать с корзины
   const onClickPlus = () => {
     onPlus({ id, title, imageUrl, price });
-    setIsAdded(!isAdded);  //Добавить в корзину и убрать с корзины
+ 
   };
 
   //функция кнопки favorite
@@ -58,7 +71,7 @@ function Card({ id, onFavorite, onPlus, title, imageUrl,
               <img className={styles.plus}
                 // выделяем товар для корзины
                 onClick={onClickPlus}
-                src={isAdded ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
+                src={isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
                 alt="plus" 
                 />
                 

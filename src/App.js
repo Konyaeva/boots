@@ -3,12 +3,10 @@ import { Route, Router, Routes } from 'react-router-dom';
 import axios from 'axios'; //сохраняет товар в бэк корзина
 import Header from './components/Header';
 import Drawer from './components/Drawer';
+import AppContext from './context';
 
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
-
-export const AppContext = React.createContext({});
-
 
 //функциия открытие корзины
 function App() {
@@ -63,9 +61,10 @@ fetchData();
   //Добавление товара в избранное
   const onAddToFavorite = async (obj) => {
     try {
-      if (favorites.find((favObj) => favObj.id == obj.id)) {
-        axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/favorites/${obj.id}`);//запрос на удаление похоже id
-        // setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+      if (favorites.find((favObj) => Number(favObj.id ) === Number(obj.id))) {
+        axios.delete(`https://637f70212f8f56e28e8c10fb.mockapi.io/favorites/${obj.id}`);
+        setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)));
+        //запрос на удаление похоже id
       } else {
         const { data } = await axios.post('https://637f70212f8f56e28e8c10fb.mockapi.io/favorites', obj);//каталог корзины весит в бэк 
         setFavorites((prev) => [...prev, data]);
@@ -75,14 +74,18 @@ fetchData();
     }
   };
 
-
+//Проверяет корзину на наличие товара 
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   };
 
+const isItemAdded = (id) => {
+  return cartItems.some((obj) => Number(obj.id) === Number(id));
+}
+
   return (
     //Все мое приложение должен знать AppContex
-    <AppContext.Provider value={{items, cartItems, favorites}}>
+    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpened, setCartItems}}>
       <div className="wrapper clear">
       {cartOpened && <Drawer
         items={cartItems}
@@ -103,7 +106,7 @@ fetchData();
           />}
         />
         <Route path="/favorites" element={
-          <Favorites onAddToFavorite={onAddToFavorite} />}
+          <Favorites />}
         />
       </Routes>
     </div>
