@@ -17,7 +17,7 @@ function Card({
   imageUrl,
   price, 
   favorited = false, 
-  loading = false 
+  loading = false,
 }) {
 
   const { isItemAdded } = React.useContext(AppContext);  
@@ -26,17 +26,15 @@ function Card({
  //Добавить в корзину и убрать с корзины
   const onClickPlus = () => {
     onPlus({ id, title, imageUrl, price });
- 
   };
 
   //функция кнопки favorite
   const onClickFavorite = () => {
     onFavorite({ id, title, imageUrl, price });
     setIsFavorite(!isFavorite);
-  }
-  return (
+  };
 
-    
+  return (
     <div className={styles.card}>
       {
         loading ? <ContentLoader
