@@ -5,8 +5,10 @@ import Header from './components/Header';
 import Drawer from './components/Drawer';
 import AppContext from './context';
 
+
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
+import Orders from './pages/Orders';
 
 //функциия открытие корзины
 function App() {
@@ -107,6 +109,9 @@ const isItemAdded = (id) => {
         />
         <Route path="/favorites" element={
           <Favorites />}
+        />
+         <Route path="/orders" element={
+          <Orders />}
         />
       </Routes>
     </div>
