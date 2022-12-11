@@ -17,7 +17,7 @@ function Home({
     const filtredItems = items.filter((item) =>
       item.title.toLowerCase().includes(searchValue.toLowerCase()),
     );
-    return (isLoading ? [...Array(7)]  : filtredItems).map((item, index) => (
+    return (isLoading ? [...Array(8)]  : filtredItems).map((item, index) => (
       <Card
         key={index}
         onFavorite={(obj) => onAddToFavorite(obj)}
@@ -46,7 +46,7 @@ function Home({
           <input onChange={onChangeSearchInput} value={searchValue} placeholder="Поиск..." />
         </div>
       </div>
-      <div className="d-flex flex-wrap">{renderItems()}</div>
+      <div className="d-flex flex-wrap justify-center">{renderItems()}</div>
     </div>
   );
 }

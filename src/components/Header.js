@@ -10,6 +10,7 @@ function Header(props) {
 
 
     return (
+        <div>
         <header className="d-flex justify-between align-center p-40">
             <Link to='/'>
                 <div className="d-flex align-center">
@@ -38,9 +39,14 @@ function Header(props) {
                     <img width={18} height={18} src="/img/user.svg" alt="Пользователь" />
                 </li>
                     </Link>
-                
-            </ul>
+            </ul>   
         </header>
+        <div className='frog'>
+        <h1 className='smith'>Stan Smith,<p className='forever'>Forever!</p></h1>
+            <img src="/img/frog.svg" alt="Frog" />
+           
+            </div>
+        </div>
     );
 }
 export default Header;
