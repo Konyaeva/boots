@@ -17,7 +17,7 @@ function Header(props) {
 
                     <img width={40} height={40} src="/img/logo.png" alt="logo" />
                     <div>
-                        <h3 className="text-uppercase"> React Sneakers</h3>
+                        <h3 className="text-uppercase "> React Sneakers</h3>
                         <p className="opacity-5">Магазин лучших кроссовок</p>
                     </div>
                 </div>
@@ -41,10 +41,10 @@ function Header(props) {
                     </Link>
             </ul>   
         </header>
-        <div className='frog'>
-        <h1 className='smith'>Stan Smith,<p className='forever'>Forever!</p></h1>
-            <img src="/img/frog.svg" alt="Frog" />
-           
+        <div className='frog '>
+        <h1 className='smith '>Stan Smith,<p className='forever '>Forever!</p>
+        <button class="greenButtonSmith " type="button">Купить</button></h1>
+            <img className='fotoFrog' src="/img/frog.svg" alt="Frog" />
             </div>
         </div>
     );
